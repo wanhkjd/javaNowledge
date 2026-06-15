@@ -1,252 +1,338 @@
+# SSM 框架面试八股整理
 
-1.  Spring框架中的单例bean是线程安全的吗？
-    
+> 覆盖范围：Spring、Spring MVC、Spring Boot、MyBatis。
 
-**候选人**：
+## 一、Spring
 
-不是线程安全的。当多用户同时请求一个服务时，容器会给每个请求分配一个线程，这些线程会并发执行业务逻辑。如果处理逻辑中包含对单例状态的修改，比如修改单例的成员属性，就必须考虑线程同步问题。Spring框架本身并不对单例bean进行线程安全封装，线程安全和并发问题需要开发者自行处理。
+### 1. Spring 框架中的单例 Bean 是线程安全的吗？
 
-通常在项目中使用的Spring bean是不可变状态（如Service类和DAO类），因此在某种程度上可以说Spring的单例bean是线程安全的。如果bean有多种状态（如ViewModel对象），就需要自行保证线程安全。最简单的解决办法是将单例bean的作用域由“singleton”变更为“prototype”。
+**回答：**
 
-2.  什么是AOP？
-    
+不是绝对线程安全。
 
-**候选人**：
+当多个用户同时请求同一个服务时，容器会为每个请求分配线程，这些线程可能并发执行业务逻辑。如果业务逻辑中修改了单例 Bean 的成员变量，就需要考虑线程安全问题。Spring 框架本身不会对单例 Bean 做线程安全封装，并发安全需要开发者自行保证。
 
-AOP，即面向切面编程，在Spring中用于将那些与业务无关但对多个对象产生影响的公共行为和逻辑抽取出来，实现公共模块复用，降低耦合。常见的应用场景包括公共日志保存和事务处理。
+不过，在实际项目中，常见的 `Service`、`DAO` 等 Spring Bean 通常是**无状态**或**不可变状态**的，因此一般不会产生线程安全问题。若 Bean 中保存了可变状态，例如某些临时数据、用户上下文或 ViewModel 对象，则需要自行处理线程安全。
 
-  
+**常见解决方式：**
 
-3.  你们项目中有没有使用到AOP？
-    
+- 尽量让 Bean 保持无状态；
+- 避免在单例 Bean 中保存请求级别的可变数据；
+- 必要时使用同步机制；
+- 将 Bean 的作用域从 `singleton` 改为 `prototype`。
 
-**候选人**：
+---
 
-我们之前在后台管理系统中使用AOP来记录系统操作日志。主要思路是使用AOP的环绕通知和切点表达式，找到需要记录日志的方法，然后通过环绕通知的参数获取请求方法的参数，例如类信息、方法信息、注解、请求方式等，并将这些参数保存到数据库。
+### 2. 什么是 AOP？
 
-  
+**回答：**
 
-4.  Spring中的事务是如何实现的？
-    
+AOP，即**面向切面编程**，用于将与核心业务无关、但会影响多个对象的公共行为和逻辑抽取出来，实现公共模块复用，降低代码耦合。
 
-**候选人**：
+**常见应用场景：**
 
-Spring实现事务的本质是利用AOP完成的。它对方法前后进行拦截，在执行方法前开启事务，在执行完目标方法后根据执行情况提交或回滚事务。
+- 日志记录；
+- 权限校验；
+- 事务管理；
+- 接口限流；
+- 统一异常处理；
+- 方法执行耗时统计。
 
+---
 
-5.  Spring中事务失效的场景有哪些？
-    
+### 3. 项目中有没有使用过 AOP？
 
-**候选人**：
+**回答：**
 
-在项目中，我遇到过几种导致事务失效的场景：
+在后台管理系统中使用过 AOP 记录系统操作日志。
 
-1. 如果方法内部捕获并处理了异常，没有将异常抛出，会导致事务失效。因此，处理异常后应该确保异常能够被抛出。
-    
-2. 如果方法抛出检查型异常（checked exception），并且没有在`@Transactional`注解上配置`rollbackFor`属性为`Exception`，那么异常发生时事务可能不会回滚。
-    
-3. 如果事务注解的方法不是公开（public）修饰的，也可能导致事务失效。
+主要思路是：
 
+1. 使用切点表达式定位需要记录日志的方法；
+2. 使用环绕通知拦截目标方法；
+3. 从通知参数中获取请求信息，例如类名、方法名、注解、请求方式、请求参数等；
+4. 执行目标方法；
+5. 将操作日志保存到数据库。
 
+---
 
-4.  Spring的bean的生命周期？
-    
+### 4. Spring 中的事务是如何实现的？
 
-**候选人**：
+**回答：**
 
-Spring中bean的生命周期包括以下步骤：
+Spring 事务的本质是基于 **AOP 动态代理** 实现的。
 
-1. 通过`BeanDefinition`获取bean的定义信息。
-    
-2. 调用构造函数实例化bean。
-    
-3. 进行bean的依赖注入，例如通过setter方法或`@Autowired`注解。
-    
-4. 处理实现了`Aware`接口的bean。
-    
-5. 执行`BeanPostProcessor`的前置处理器。
-    
-6. 调用初始化方法，如实现了`InitializingBean`接口或自定义的`init-method`。
-    
-7. 执行`BeanPostProcessor`的后置处理器，可能在这里产生代理对象。
-    
-8. 最后是销毁bean。
+执行流程大致如下：
 
+1. 在目标方法执行前开启事务；
+2. 执行业务方法；
+3. 如果方法正常执行完成，则提交事务；
+4. 如果方法执行过程中抛出符合回滚规则的异常，则回滚事务。
 
-9.  Spring中的循环引用？
-    
+---
 
-**候选人**：
+### 5. Spring 中事务失效的场景有哪些？
 
-循环依赖发生在两个或两个以上的bean互相持有对方，形成闭环。Spring框架允许循环依赖存在，并通过三级缓存解决大部分循环依赖问题：
+**回答：**
 
-1. 一级缓存：单例池，缓存已完成初始化的bean对象。
-    
-2. 二级缓存：缓存尚未完成生命周期的早期bean对象。
-    
-3. 三级缓存：缓存`ObjectFactory`，用于创建bean对象。
+常见事务失效场景包括：
 
-4.  那具体解决流程清楚吗？
-    
+1. **异常被捕获但没有继续抛出**  
+   方法内部捕获并处理异常后，没有将异常继续抛出，事务代理感知不到异常，就不会触发回滚。
 
-**候选人**：
+2. **抛出检查型异常但没有配置 `rollbackFor`**  
+   默认情况下，Spring 只会对 `RuntimeException` 和 `Error` 回滚。若抛出 checked exception，需要配置：
+   ```java
+   @Transactional(rollbackFor = Exception.class)
+   ```
 
-解决循环依赖的流程如下：
+3. **方法不是 `public` 修饰**  
+   `@Transactional` 通常要求作用在 `public` 方法上，否则可能不会生效。
 
-1. 实例化A对象，并创建`ObjectFactory`存入三级缓存。
-    
-2. A在初始化时需要B对象，开始B的创建逻辑。
-    
-3. B实例化完成，也创建`ObjectFactory`存入三级缓存。
-    
-4. B需要注入A，通过三级缓存获取`ObjectFactory`生成A对象，存入二级缓存。
-    
-5. B通过二级缓存获得A对象后，B创建成功，存入一级缓存。
-    
-6. A对象初始化时，由于B已创建完成，可以直接注入B，A创建成功存入一级缓存。
-    
-7. 清除二级缓存中的临时对象A。
+4. **同一个类中方法内部自调用**  
+   事务依赖代理对象生效，如果在同一个类中直接调用带事务的方法，可能绕过代理，导致事务失效。
 
+5. **类没有被 Spring 容器管理**  
+   如果对象不是 Spring Bean，事务注解不会被 Spring 代理处理。
 
-8.  构造方法出现了循环依赖怎么解决？
-    
+---
 
-**候选人**：
+### 6. Spring Bean 的生命周期？
 
-由于构造函数是bean生命周期中最先执行的，Spring框架无法解决构造方法的循环依赖问题。可以使用`@Lazy`懒加载注解，延迟bean的创建直到实际需要时。
+**回答：**
 
+Spring Bean 的生命周期主要包括以下步骤：
 
+1. 读取 `BeanDefinition`，获取 Bean 的定义信息；
+2. 调用构造方法实例化 Bean；
+3. 进行依赖注入，例如通过 setter 方法或 `@Autowired`；
+4. 处理实现了 `Aware` 接口的 Bean；
+5. 执行 `BeanPostProcessor` 的前置处理方法；
+6. 执行初始化方法，例如 `InitializingBean#afterPropertiesSet()` 或自定义 `init-method`；
+7. 执行 `BeanPostProcessor` 的后置处理方法，AOP 代理对象通常可能在此阶段生成；
+8. Bean 可以被正常使用；
+9. 容器关闭时执行销毁逻辑，例如 `DisposableBean#destroy()` 或自定义 `destroy-method`。
 
+---
 
-10.  SpringMVC的执行流程？
-    
+### 7. Spring 中的循环依赖是什么？
 
-**候选人**：
-（前后端分离）
-SpringMVC的执行流程包括以下步骤：
+**回答：**
 
-1. 用户发送请求到前端控制器`DispatcherServlet`。
-    
-2. `Dispatcher``Servlet`调用`HandlerMapping`找到具体处理器。
-    
-3. `HandlerMapping`返回处理器对象及拦截器（如果有）给`DispatcherServlet`。
-    
-4. `DispatcherServlet`调用`HandlerAdapter`。
-    
-5. `HandlerAdapter`适配并调用具体处理器（Controller）。
-    
-6. Controller方法上添加了@ResponseBody
-    
-7. 通过HttpMessageConverter来返回结果转换为JSON并响应到前端
+循环依赖是指两个或多个 Bean 之间相互依赖，形成闭环。例如：A 依赖 B，B 又依赖 A。
 
+Spring 可以通过**三级缓存**解决大部分单例 Bean 的属性注入循环依赖问题。
 
-8.  Springboot自动配置原理？
-    
+**三级缓存：**
 
-**候选人**：
+1. **一级缓存：`singletonObjects`**  
+   保存已经完成初始化的单例 Bean。
 
-Spring Boot的自动配置原理基于`@SpringBootApplication`注解，它封装了`@SpringBootConfiguration`、`@EnableAutoConfiguration`和`@ComponentScan`。`@EnableAutoConfiguration`是核心，它通过`@Import`导入配置选择器，读取`META-INF/spring.factories`文件中的类名，根据条件注解决定是否将配置类中的Bean导入到Spring容器中。
+2. **二级缓存：`earlySingletonObjects`**  
+   保存尚未完成完整生命周期的早期 Bean。
 
+3. **三级缓存：`singletonFactories`**  
+   保存 `ObjectFactory`，用于提前暴露 Bean 引用，必要时生成代理对象。
 
+---
 
+### 8. Spring 循环依赖的解决流程？
 
-  Spring 的常见注解有哪些？
-![[Spring的常见注解.png]]
+**回答：**
 
+以 A 依赖 B、B 依赖 A 为例：
 
-6.  SpringMVC常见的注解有哪些？
-    
+1. 实例化 A，并将 A 的 `ObjectFactory` 放入三级缓存；
+2. A 进行属性注入时发现需要 B，于是开始创建 B；
+3. 实例化 B，并将 B 的 `ObjectFactory` 放入三级缓存；
+4. B 进行属性注入时发现需要 A；
+5. Spring 从三级缓存中获取 A 的 `ObjectFactory`，生成 A 的早期引用，并放入二级缓存；
+6. B 注入 A 后完成初始化，放入一级缓存；
+7. A 继续注入已经创建完成的 B；
+8. A 完成初始化后放入一级缓存，并清理二级缓存中的早期引用。
 
-**候选人**：
+---
 
-SpringMVC的常见注解有：
+### 9. 构造方法出现循环依赖怎么解决？
 
-- `@RequestMapping`：映射请求路径。
-    
-- `@RequestBody`：接收HTTP请求的JSON数据。
-    
-- `@RequestParam`：指定请求参数名称。
-    
-- `@PathVariable`：从请求路径中获取参数。
-    
-- `@ResponseBody`：将Controller方法返回的对象转化为JSON。
-    
-- `@RequestHeader`：获取请求头数据。
-    
-- `@PostMapping`、`@GetMapping`等。
-    
-![[SpringMVC常见的注解.png]]
+**回答：**
 
-14.  Springboot常见注解有哪些？
-    
+构造方法循环依赖 Spring 默认无法解决，因为构造方法是 Bean 创建时最先执行的阶段，此时对象还没有完成实例化，无法提前暴露引用。
 
-**候选人**：
+**解决方式：**
 
-Spring Boot的常见注解包括：
+- 使用 `@Lazy` 懒加载；
+- 改为 setter 注入；
+- 重构代码，拆分职责，避免循环依赖；
+- 引入中间服务或事件机制解耦。
 
-- `@SpringBootApplication`：由`@SpringBootConfiguration`、`@EnableAutoConfiguration`和`@ComponentScan`组成。
-    
-- 其他注解如`@RestController`、`@GetMapping`、`@PostMapping`等，用于简化Spring MVC的配置。
+---
 
+### 10. Spring 的常见注解有哪些？
 
-15.  MyBatis执行流程？
-    
+![[java八股文/资源/Spring的常见注解.png]]
 
-**候选人**：
+常见注解包括：
 
-MyBatis的执行流程如下：
+- `@Component`、`@Controller`、`@Service`、`@Repository`：声明 Bean；
+- `@Autowired`：按类型自动注入；
+- `@Qualifier`：配合 `@Autowired` 按名称注入；
+- `@Scope`：指定 Bean 作用域；
+- `@Configuration`：声明配置类；
+- `@ComponentScan`：指定组件扫描路径；
+- `@Bean`：将方法返回值注册为 Bean；
+- `@Import`：导入配置类或组件；
+- `@Aspect`、`@Before`、`@After`、`@Around`、`@Pointcut`：AOP 相关注解。
 
-1. 读取MyBatis配置文件`mybatis-config.xml`。
-    
-2. 构造会话工厂`SqlSessionFactory`。
-    
-3. 会话工厂创建`SqlSession`对象。
-    
-4. 操作数据库的接口，`Executor`执行器。
-    
-5. `Executor`执行方法中的`MappedStatement`参数。
-    
-6. 输入参数映射。
-    
-7. 输出结果映射。
-![[MyBatis的执行流程.png]]
+---
 
-8.  Mybatis是否支持延迟加载？
-    
+## 二、Spring MVC
 
-**候选人**：
-  `查询主数据时，暂时不查关联数据，等代码真正用到关联数据那一刻，再去数据库查询。`
-MyBatis支持延迟加载，即在需要用到数据时才加载。可以通过配置文件中的`lazyLoadingEnabled`配置启用或禁用延迟加载。
+### 11. Spring MVC 的执行流程？
 
-  
+**回答：**
 
-17.  延迟加载的底层原理知道吗？
-    
+以前后端分离场景为例，Spring MVC 的执行流程如下：
 
-**候选人**：
+1. 用户请求发送到前端控制器 `DispatcherServlet`；
+2. `DispatcherServlet` 调用 `HandlerMapping` 查找具体处理器；
+3. `HandlerMapping` 返回处理器对象以及拦截器链；
+4. `DispatcherServlet` 调用 `HandlerAdapter`；
+5. `HandlerAdapter` 适配并执行具体的 Controller 方法；
+6. Controller 方法返回结果，通常配合 `@ResponseBody`；
+7. `HttpMessageConverter` 将返回对象转换为 JSON；
+8. 将响应结果返回给前端。
 
-延迟加载的底层原理主要使用CGLIB动态代理实现：
+---
 
-1. 使用CGLIB创建目标对象的代理对象。
-    
-2. 调用目标方法时，如果发现是null值，则执行SQL查询。
-    
-3. 获取数据后，设置属性值并继续查询目标方法。
+### 12. Spring MVC 常见注解有哪些？
 
+**回答：**
 
+![[java八股文/资源/SpringMVC常见的注解.png]]
 
-4.  Mybatis的一级、二级缓存用过吗？
-    
+常见注解包括：
 
-**候选人**：
+- `@RequestMapping`：映射请求路径；
+- `@GetMapping`、`@PostMapping`、`@PutMapping`、`@DeleteMapping`：请求方法映射；
+- `@RequestBody`：接收 HTTP 请求体中的 JSON 数据；
+- `@RequestParam`：获取请求参数；
+- `@PathVariable`：获取路径参数；
+- `@ResponseBody`：将方法返回值转换为响应体数据；
+- `@RequestHeader`：获取请求头数据；
+- `@RestController`：等价于 `@Controller + @ResponseBody`。
 
-MyBatis的一级缓存是基于`PerpetualCache`的HashMap本地缓存，作用域为Session，默认开启。二级缓存需要单独开启，作用域为Namespace或mapper，默认也是采用`PerpetualCache`，HashMap存储。
+---
 
-  
+## 三、Spring Boot
 
-19.  Mybatis的二级缓存什么时候会清理缓存中的数据？
-    
+### 13. Spring Boot 自动配置原理？
 
-**候选人**：
+**回答：**
 
-当作用域（一级缓存Session/二级缓存Namespaces）进行了新增、修改、删除操作后，默认该作用域下所有select中的缓存将被清空。
+Spring Boot 自动配置主要基于 `@SpringBootApplication` 注解。
+
+`@SpringBootApplication` 由以下注解组合而成：
+
+- `@SpringBootConfiguration`；
+- `@EnableAutoConfiguration`；
+- `@ComponentScan`。
+
+其中，`@EnableAutoConfiguration` 是核心。它通过 `@Import` 导入自动配置选择器，读取自动配置类信息，并根据条件注解决定是否将对应配置类中的 Bean 注册到 Spring 容器中。
+
+> 说明：Spring Boot 2.x 主要通过 `META-INF/spring.factories` 加载自动配置类；Spring Boot 3.x 主要使用 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`。
+
+---
+
+### 14. Spring Boot 常见注解有哪些？
+
+**回答：**
+
+常见注解包括：
+
+- `@SpringBootApplication`：Spring Boot 启动类核心注解；
+- `@SpringBootConfiguration`：声明当前类是 Spring Boot 配置类；
+- `@EnableAutoConfiguration`：开启自动配置；
+- `@ConfigurationProperties`：绑定配置文件属性；
+- `@ConditionalOnClass`、`@ConditionalOnMissingBean`、`@ConditionalOnProperty`：条件装配相关注解；
+- `@RestController`、`@GetMapping`、`@PostMapping`：Web 开发常用注解。
+
+---
+
+## 四、MyBatis
+
+### 15. MyBatis 执行流程？
+
+**回答：**
+
+![[java八股文/资源/MyBatis的执行流程.png]]
+
+MyBatis 的执行流程如下：
+
+1. 读取 MyBatis 配置文件，例如 `mybatis-config.xml`；
+2. 构建会话工厂 `SqlSessionFactory`；
+3. 通过 `SqlSessionFactory` 创建 `SqlSession`；
+4. 通过 `SqlSession` 调用 Mapper 接口方法；
+5. 底层由 `Executor` 执行器处理 SQL；
+6. 根据 `MappedStatement` 获取 SQL、参数映射和结果映射信息；
+7. 完成输入参数映射；
+8. 执行 SQL；
+9. 完成结果集映射并返回 Java 对象。
+
+---
+
+### 16. MyBatis 是否支持延迟加载？
+
+**回答：**
+
+支持。
+
+延迟加载指的是：查询主数据时，暂时不查询关联数据，等代码真正访问关联数据时，再去数据库查询。
+
+可以通过配置项控制是否开启延迟加载：
+
+```xml
+<setting name="lazyLoadingEnabled" value="true"/>
+```
+
+---
+
+### 17. MyBatis 延迟加载的底层原理是什么？
+
+**回答：**
+
+MyBatis 延迟加载底层主要基于**动态代理**实现，常见方式包括 CGLIB 或 Javassist。
+
+大致流程如下：
+
+1. 为目标对象创建代理对象；
+2. 当访问延迟加载属性时，代理对象拦截方法调用；
+3. 判断该属性是否已经加载；
+4. 如果尚未加载，则执行对应 SQL 查询；
+5. 查询完成后，将结果设置到属性中并返回。
+
+---
+
+### 18. MyBatis 的一级缓存和二级缓存用过吗？
+
+**回答：**
+
+MyBatis 缓存分为一级缓存和二级缓存。
+
+| 缓存类型 | 作用域 | 是否默认开启 | 说明 |
+| --- | --- | --- | --- |
+| 一级缓存 | `SqlSession` | 默认开启 | 基于 `PerpetualCache`，本质是 HashMap 本地缓存 |
+| 二级缓存 | `Mapper/Namespace` | 需要配置开启 | 多个 `SqlSession` 可以共享同一 Namespace 下的缓存 |
+
+---
+
+### 19. MyBatis 的二级缓存什么时候会清理？
+
+**回答：**
+
+当对应作用域中执行了新增、修改、删除操作后，默认会清空该作用域下的缓存数据。
+
+也就是说：
+
+- 一级缓存：同一个 `SqlSession` 中执行增删改操作后会清理；
+- 二级缓存：同一个 `Namespace` 下执行增删改操作后会清理相关缓存。
