@@ -1,4 +1,4 @@
-﻿# SSM 框架面试八股整理
+# SSM 框架面试八股整理
 
 > 覆盖范围：Spring、Spring MVC、Spring Boot、MyBatis。
 
