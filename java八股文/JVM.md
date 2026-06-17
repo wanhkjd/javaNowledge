@@ -631,7 +631,7 @@ public class Application {
 >
 > file=<filename>用于指定快照dump文件的文件名。
 
-## 5. 面试现场
+5. 面试现场
 
 
 ## 6. JVM组成
