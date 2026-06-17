@@ -10,3 +10,21 @@
 
 2. JVM由哪些部分组成，运行流程是什么？
 ![JVM组成|496](资源/JVM组成.PNG)
+
+- ClassLoader（类加载器）
+    
+- Runtime Data Area（运行时数据区，内存分区）
+    
+- Execution Engine（执行引擎）
+    
+- Native Method Library（本地库接口）
+    
+
+运行流程：
+
+（1）类加载器（ClassLoader）把Java代码转换为字节码
+
+（2）运行时数据区（Runtime Data Area）把字节码加载到内存中，而字节码文件只是JVM的一套指令集规范，并不能直接交给底层系统去执行，而是有执行引擎运行
+
+（3）执行引擎（Execution Engine）将字节码翻译为底层系统指令，再交由CPU执行去执行，此时需要调用其他语言的本地库接口（Native Method Library）来实现整个程序的功能。
+
