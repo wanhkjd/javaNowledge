@@ -298,3 +298,43 @@ public class String {
     当对老年代代产生GC：Major GC
 
     当对新生代和老年代产生FullGC： 新生代 + 老年代完整垃圾回收，暂停时间长，**应尽力避免**
+
+2. #### 工作机制
+    
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=MTY4MGE0MjNjNTNmYzI4N2I2NDhhNzE0NTJkNzBkMDNfSTRJT01wZVpiY2d2ZlpaOWtQZzFCSFR1T084OTZHZlhfVG9rZW46RGo3TGI1M1hTb1FjU2Z4TTY2VmN2WkUzbkdmXzE3ODE3MDI4NTU6MTc4MTcwNjQ1NV9WNA&add_watermark=true&scene_type=CCM)
+
+- 新创建的对象，都会先分配到eden区
+    
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NjU0NTg0NmM1YmY4MTg5ZDNmOGY4Y2NlNzcxMTNhYjhfMWdOVEVrYVdRSjNLOGdKWnlqTU80enByRHFJMjRpTGVfVG9rZW46SGVUTmJFRzlkb01MV094cWNwTGNRYTZibkljXzE3ODE3MDI4NTU6MTc4MTcwNjQ1NV9WNA&add_watermark=true&scene_type=CCM)
+
+- 当伊甸园内存不足，标记伊甸园与 from（现阶段没有）的存活对象
+    
+- 将存活对象采用复制算法复制到 to 中，复制完毕后，伊甸园和 from 内存都得到释放
+    
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NDg5NTYyZDlmZGUwNzJlYjhhNzA4ZjA1N2I0ODQzNTZfRjNuc1hXMHpBYWJJVkpHeXg5MXVuTk13RzF0cDVPTGpfVG9rZW46UG9XTGJEZDVtb1RveTZ4ZzN6ZGM2SkZHbk52XzE3ODE3MDI4NTU6MTc4MTcwNjQ1NV9WNA&add_watermark=true&scene_type=CCM)
+
+- 经过一段时间后伊甸园的内存又出现不足，标记eden区域to区存活的对象，将存活的对象复制到from区
+    
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=MmUxZDNmYmNmNDQ4MDFlZjFmNDAyOGIyNjk3OGM5ZWNfc0dHUTJFMGpzUnBaU2ZBZEtwUm9kcjlhUThSMG5TbGhfVG9rZW46VDhNTmI1WmZ2b3pnQWl4d3VVOWNLVTlLbkVjXzE3ODE3MDI4NTU6MTc4MTcwNjQ1NV9WNA&add_watermark=true&scene_type=CCM)
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=MWUxM2EyY2EzMDQ3MTRmMzNiMzc5OGU0ZWQxYzUzZTVfTTZJZWdnR3RzTHlrY2gzSGZPYnQ5Y0NQbHQwbzA5cXdfVG9rZW46TnhpYmJvWWVTb1lERXV4QU56Z2NQRUtIbktkXzE3ODE3MDI4NTU6MTc4MTcwNjQ1NV9WNA&add_watermark=true&scene_type=CCM)
+
+- 当幸存区对象熬过几次回收（最多15次），晋升到老年代（幸存区内存不足或大对象会导致提前晋升）
+    
+
+**MinorGC、 Mixed GC 、 FullGC的区别是什么**
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=YWNmZDcyZDY3MzFjOTU5ODQyZWJjMGRmNDliNjg2ZDBfblVQcFByeXBTeEx6UWVUWjR6VWx0VHZ0andpZFNnMHFfVG9rZW46S1JUV2J3NW81b05Xc1R4Skp5R2NXU2JWbldoXzE3ODE3MDI4NTU6MTc4MTcwNjQ1NV9WNA&add_watermark=true&scene_type=CCM)
+
+- MinorGC【young GC】发生在新生代的垃圾回收，暂停时间短（STW）
+    
+- Mixed GC 新生代 + 老年代部分区域的垃圾回收，G1 收集器特有
+    
+- FullGC： 新生代 + 老年代完整垃圾回收，暂停时间长（STW），应尽力避免？
+    
+
+STW（Stop-The-World）：暂停所有应用程序线程，等待垃圾回收的完成
