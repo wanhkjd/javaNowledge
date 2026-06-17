@@ -179,3 +179,27 @@ JVM只会运行二进制文件，而类加载器（ClassLoader）的主要作用
 2. ### 什么是双亲委派模型？
 
     如果一个类加载器在接到加载类的请求时，它首先不会自己尝试去加载这个类，而是把这个请求任务委托给父类加载器去完成，依次递归，如果父类加载器可以完成类加载任务，就返回成功；只有父类加载器无法完成此加载任务时，才由下一级去加载。
+
+3. ### JVM为什么采用双亲委派机制
+
+（1）通过双亲委派机制可以避免某一个类被重复加载，当父类已经加载后则无需重复加载，保证唯一性。
+
+（2）为了安全，保证类库API不会被修改
+
+在工程中新建java.lang包，接着在该包下新建String类，并定义main函数
+
+```Java
+public class String {
+ 
+     public static void main(String[] args) {
+ 
+         System.out.println("demo info");
+     }
+ }
+```
+
+此时执行main函数，会出现异常，在类 java.lang.String 中找不到 main 方法
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=MjI1Nzk1ZDk0ZDVlNDJmMGViMjJhYzI2YTA2YTYxYWNfRUd5V0xYTTlod0s0aHFzWlN1RTdxM1hZaWttdGY1cHFfVG9rZW46THhNRmJoODNib2xGYlR4ckN4bWNLTzlNblVkXzE3ODE3MDAyNTg6MTc4MTcwMzg1OF9WNA&add_watermark=true&scene_type=CCM)
+
+出现该信息是因为由双亲委派的机制，java.lang.String的在启动类加载器(Bootstrap classLoader)得到加载，因为在核心jre库中有其相同名字的类文件，但该类中并没有main方法。这样就能防止恶意篡改核心API库。
