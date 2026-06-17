@@ -1,0 +1,16 @@
+{
+  "id": "conv-1781658656100-f0z9s39ea",
+  "providerId": "codex",
+  "title": "帮我整理排版改文章内容",
+  "titleGenerationStatus": "pending",
+  "createdAt": 1781658656100,
+  "updatedAt": 1781658675672,
+  "lastResponseAt": 1781658675672,
+  "sessionId": "019ed321-9ee1-7b03-8683-f762a006f6ad",
+  "providerState": {
+    "threadId": "019ed321-9ee1-7b03-8683-f762a006f6ad",
+    "sessionFilePath": "C:\\Users\\35998\\.codex\\sessions\\2026\\06\\17\\rollout-2026-06-17T09-11-01-019ed321-9ee1-7b03-8683-f762a006f6ad.jsonl",
+    "transcriptRootPath": "C:\\Users\\35998\\.codex\\sessions"
+  },
+  "currentNote": "java八股文/多线程.md"
+}
