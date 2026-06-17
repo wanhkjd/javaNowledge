@@ -416,3 +416,67 @@ STW（Stop-The-World）：暂停所有应用程序线程，等待垃圾回收的
 
 其中H叫做巨型对象，如果对象非常大，会开辟一块连续的空间存储巨型对象
 
+7. 强引用、软引用、弱引用、虚引用的区别？
+
+ - 强引用
+    
+
+强引用：只有所有 GC Roots 对象都不通过【强引用】引用该对象，该对象才能被垃圾回收
+
+```Java
+User user = new User();
+```
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NDIwYjc0MDI0ZGZiOGFhMmJlZWU0NjNmOWQ5NzljYWRfekJDUHY2TDM2SG1IRldrb0ZTWURJS1RwODUxdUU2RFFfVG9rZW46U3NlY2JCRTd6b0VxWmJ4bEw1RGNadUJFbjRmXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
+
+2. #### 软引用
+    
+
+软引用：仅有软引用引用该对象时，在垃圾回收后，内存仍不足时会再次出发垃圾回收
+
+```Java
+User user = new User();
+SoftReference softReference = new SoftReference(user);
+```
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=YzBhYmVkNzM4MjBkYWI2MmQ2OGZkMjU2YWU1ODkxNTRfUkxUVml5Y014bHY5VmxZVmhXWERwRVJOWnQ4RXY2WU9fVG9rZW46Wk94aWJ0ZkN1b0Y1N3N4WUlkZWM0WTUwbkxnXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
+
+3. #### 弱引用
+    
+
+弱引用：仅有弱引用引用该对象时，在垃圾回收时，无论内存是否充足，都会回收弱引用对象
+
+```Java
+User user = new User();
+WeakReference weakReference = new WeakReference(user);
+```
+
+延伸话题：ThreadLocal内存泄漏问题
+
+ThreadLocal用的就是弱引用，看以下源码：
+
+```Java
+static class Entry extends WeakReference<ThreadLocal<?>> {
+    Object value;
+
+    Entry(ThreadLocal<?> k, Object v) {
+         super(k);
+         value = v; //强引用，不会被回收
+     }
+}
+```
+
+`Entry`的key是当前ThreadLocal，value值是我们要设置的数据。
+
+`WeakReference`表示的是弱引用，当JVM进行GC时，一旦发现了只具有弱引用的对象，不管当前内存空间是否足够，都会回收它的内存。但是`value`是强引用，它不会被回收掉。
+
+> ThreadLocal使用建议：使用完毕后注意调用清理方法。
+
+4. #### 虚引用
+    
+
+虚引用：必须配合引用队列使用，被引用对象回收时，会将虚引用入队，由 Reference Handler 线程调用虚引用相关方法释放直接内存
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjExOWQ1MmVlYjVjZDg2ZGUwOTYyNjk0Mjk2NWZmZDZfb3RhSmZqNk5ETWQwM0ZKa3ByUzJ1N0tNckczYXVzN0pfVG9rZW46SHhVc2JFQTF3bzdRTkp4dW1KbmNVcno5blZnXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NDcwNTZmZGJiZTBmNDE0YzBjMGM0YWI4YTYwOGU0ZWFfek1NSXpxR0JIMHNDdTNpWFB1WTRqMkVRR0RlamF6NUJfVG9rZW46Qll0WmJRbDV0b3UxRWl4c1V1VmNZbmVNblZiXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
