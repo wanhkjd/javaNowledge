@@ -384,3 +384,46 @@ STW（Stop-The-World）：暂停所有应用程序线程，等待垃圾回收的
 - 分成三个阶段：新生代回收、并发标记、混合收集
     
 - 如果并发失败（即回收速度赶不上创建新对象速度），会触发 Full GC
+
+2. #### Young Collection(年轻代垃圾回收)
+    
+
+- 初始时，所有区域都处于空闲状态
+    
+- 创建了一些对象，挑出一些空闲区域作为伊甸园区存储这些对象
+
+- 当伊甸园需要垃圾回收时，挑出一个空闲区域作为幸存区，用复制算法复制存活对象，需要暂停用户线程
+
+- 随着时间流逝，伊甸园的内存又有不足
+
+- 将伊甸园以及之前幸存区中的存活对象，采用复制算法，复制到新的幸存区，其中较老对象晋升至老年代
+    
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJkMTI4MDg2YTJhYTg1ODJmOWQ5MzUzNzg5NTM5NTFfQk1xaVlrZlVwS0RlU3JwYjF0RzVrNW92UEo4eE1SUlhfVG9rZW46R3VZYmJ1YmhpbzJRbk94SVBXeWM4VjF3bnZlXzE3ODE3MDMxNTY6MTc4MTcwNjc1Nl9WNA&add_watermark=true&scene_type=CCM)
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NjdmZDQ5MTJjNzA2Mzc1Yzk1OTI1ZWVmOWNiMjlmYmNfU3pZSmhsZnRXcm11anBkRGZUdnBJOGZFYzJGYmRRTjRfVG9rZW46QkVKUWI1VTR5b2FzRW14d3Frc2NBU0JzblFoXzE3ODE3MDMxNTY6MTc4MTcwNjc1Nl9WNA&add_watermark=true&scene_type=CCM)
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=OTM0ZjZlZjQyZjVmYmZhNWE4NzUxNDkyNmM2OTAyNTNfdm51ajJWdHo5MTZ5WldER1VMdzFldzVxbmNCcEo2dXhfVG9rZW46WGpTTGJzWFBxb1FFNXZ4bEJsMGNndUt6bnVjXzE3ODE3MDMxNTY6MTc4MTcwNjc1Nl9WNA&add_watermark=true&scene_type=CCM)
+
+3. #### Young Collection + Concurrent Mark (年轻代垃圾回收+并发标记)
+    
+
+当老年代占用内存超过阈值(默认是45%)后，触发并发标记，这时无需暂停用户线程
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NTJjOTJhN2U3ZDNjNDcwODlkNTNjZTU0NzVlY2ZiNzNfVHcybGdDZ245RGJqS1NVTWdOQWFHSDFkYXZZVEVSN1BfVG9rZW46UE9nYmJiTUlDb1A0Q2J4eXptZGM0cldJbktiXzE3ODE3MDMxNTY6MTc4MTcwNjc1Nl9WNA&add_watermark=true&scene_type=CCM)
+
+- 并发标记之后，会有重新标记阶段解决漏标问题，此时需要暂停用户线程。
+    
+- 这些都完成后就知道了老年代有哪些存活对象，随后进入混合收集阶段。此时不会对所有老年代区域进行回收，而是根据暂停时间目标优先回收价值高（存活对象少）的区域（这也是 Gabage First 名称的由来）。
+    
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=YjhiMmI2MGI2MDMyY2MwNDQ3YTkyYWJkZmM2YmQ4MGVfQThWS0NMQjJuZWRDaFZPNlBBMk1NSnNTSzQ1UklaVXFfVG9rZW46RzZjYmJZUXZDb1lvbXd4clJJWWNxNFV0bmpmXzE3ODE3MDMxNTY6MTc4MTcwNjc1Nl9WNA&add_watermark=true&scene_type=CCM)
+
+4. #### Mixed Collection (混合垃圾回收)
+    
+
+复制完成，内存得到释放。进入下一轮的新生代回收、并发标记、混合收集
+
+![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NTcxMjcwNGEzNGE1NDk3OTA5OGUzNjgzNDIwZDUzOWNfU2UxNXRMRWFEYU1WUEZ4dnhTdXl2Y1JkamxsMGRPd1hfVG9rZW46UERYY2JrelI3bzRwalV4WjVEV2NsemNWbkdnXzE3ODE3MDMxNTY6MTc4MTcwNjc1Nl9WNA&add_watermark=true&scene_type=CCM)
+
+其中H叫做巨型对象，如果对象非常大，会开辟一块连续的空间存储巨型对象
