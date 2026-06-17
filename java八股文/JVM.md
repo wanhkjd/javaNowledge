@@ -200,6 +200,10 @@ public class String {
 
 此时执行main函数，会出现异常，在类 java.lang.String 中找不到 main 方法
 
-![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=MjI1Nzk1ZDk0ZDVlNDJmMGViMjJhYzI2YTA2YTYxYWNfRUd5V0xYTTlod0s0aHFzWlN1RTdxM1hZaWttdGY1cHFfVG9rZW46THhNRmJoODNib2xGYlR4ckN4bWNLTzlNblVkXzE3ODE3MDAyNTg6MTc4MTcwMzg1OF9WNA&add_watermark=true&scene_type=CCM)
+```Java
+错误：在类java.lang.string中找不到main方氵去，请将main方法定义为：PUbtiCstaticVOidmain(String[]args)否则JavaFX应用程序类必须扩展javafx.apptication.App1ication
+```
 
 出现该信息是因为由双亲委派的机制，java.lang.String的在启动类加载器(Bootstrap classLoader)得到加载，因为在核心jre库中有其相同名字的类文件，但该类中并没有main方法。这样就能防止恶意篡改核心API库。
+
+4. ### 说一下类装载的执行过程？
