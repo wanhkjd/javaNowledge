@@ -142,3 +142,5 @@
     栈空间不足：java.lang.StackOverFlowError。
 
     堆空间不足：java.lang.OutOfMemoryError。
+
+13. ## 类加载器
