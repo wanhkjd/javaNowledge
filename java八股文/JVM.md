@@ -429,7 +429,7 @@ User user = new User();
 
 ![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NDIwYjc0MDI0ZGZiOGFhMmJlZWU0NjNmOWQ5NzljYWRfekJDUHY2TDM2SG1IRldrb0ZTWURJS1RwODUxdUU2RFFfVG9rZW46U3NlY2JCRTd6b0VxWmJ4bEw1RGNadUJFbjRmXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
 
-2. #### 软引用
+2.  软引用
     
 
 软引用：仅有软引用引用该对象时，在垃圾回收后，内存仍不足时会再次出发垃圾回收
@@ -441,7 +441,7 @@ SoftReference softReference = new SoftReference(user);
 
 ![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=YzBhYmVkNzM4MjBkYWI2MmQ2OGZkMjU2YWU1ODkxNTRfUkxUVml5Y014bHY5VmxZVmhXWERwRVJOWnQ4RXY2WU9fVG9rZW46Wk94aWJ0ZkN1b0Y1N3N4WUlkZWM0WTUwbkxnXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
 
-3. #### 弱引用
+3. 弱引用
     
 
 弱引用：仅有弱引用引用该对象时，在垃圾回收时，无论内存是否充足，都会回收弱引用对象
@@ -472,11 +472,18 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 
 > ThreadLocal使用建议：使用完毕后注意调用清理方法。
 
-4. #### 虚引用
+4. 虚引用
     
 
 虚引用：必须配合引用队列使用，被引用对象回收时，会将虚引用入队，由 Reference Handler 线程调用虚引用相关方法释放直接内存
+```Java
+Object obj = new Object();
 
-![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjExOWQ1MmVlYjVjZDg2ZGUwOTYyNjk0Mjk2NWZmZDZfb3RhSmZqNk5ETWQwM0ZKa3ByUzJ1N0tNckczYXVzN0pfVG9rZW46SHhVc2JFQTF3bzdRTkp4dW1KbmNVcno5blZnXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
+ReferenceQueue<Object> queue = new ReferenceQueue<>();
 
-![](https://heuqqdmbyk.feishu.cn/space/api/box/stream/download/asynccode/?code=NDcwNTZmZGJiZTBmNDE0YzBjMGM0YWI4YTYwOGU0ZWFfek1NSXpxR0JIMHNDdTNpWFB1WTRqMkVRR0RlamF6NUJfVG9rZW46Qll0WmJRbDV0b3UxRWl4c1V1VmNZbmVNblZiXzE3ODE3MDMyNzk6MTc4MTcwNjg3OV9WNA&add_watermark=true&scene_type=CCM)
+PhantomReference<Object> pr = new PhantomReference<>(obj, queue);
+
+```
+
+
+
