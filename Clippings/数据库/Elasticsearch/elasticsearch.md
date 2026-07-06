@@ -1,13 +1,13 @@
 ---
-title: "Java八股文网"
-source: "https://hhzh.github.io/elasticsearch/02-elasticsearch-selection.html#%E6%90%9C%E7%B4%A2%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%B1%82%E9%9D%A2%E7%9A%84%E7%93%B6%E9%A2%88"
+title: " Elasticsearch"
+source: https://hhzh.github.io/elasticsearch/02-elasticsearch-selection.html#%E6%90%9C%E7%B4%A2%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%B1%82%E9%9D%A2%E7%9A%84%E7%93%B6%E9%A2%88
 author:
   - "[[Mr.Hope]]"
 published:
 created: 2026-07-06
-description: "凌晨两点，线上搜索接口响应时间飙升至 8 秒，用户投诉电话被打爆。你盯着监控面板，第一反应是加索引、加机器，但真正的问题往往藏在查询语句的每一个细节里——一个错误的 text 类型字段、一次深分页查询、甚至 Filter 和 Query 用反了，都能让 Elasticsearch 集群从「快如闪电」变成「慢如蜗牛」。 为什么同样的查询语句，有的毫秒级返..."
+description: 凌晨两点，线上搜索接口响应时间飙升至 8 秒，用户投诉电话被打爆。你盯着监控面板，第一反应是加索引、加机器，但真正的问题往往藏在查询语句的每一个细节里——一个错误的 text 类型字段、一次深分页查询、甚至 Filter 和 Query 用反了，都能让 Elasticsearch 集群从「快如闪电」变成「慢如蜗牛」。 为什么同样的查询语句，有的毫秒级返...
 tags:
-  - "clippings"
+  - clippings
 ---
 凌晨两点，线上搜索接口响应时间飙升至 8 秒，用户投诉电话被打爆。你盯着监控面板，第一反应是加索引、加机器，但真正的问题往往藏在查询语句的每一个细节里——一个错误的 `text` 类型字段、一次深分页查询、甚至 Filter 和 Query 用反了，都能让 Elasticsearch 集群从「快如闪电」变成「慢如蜗牛」。
 
