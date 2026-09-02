@@ -1,9 +1,9 @@
 {
   "userName": "",
   "permissionMode": "yolo",
-  "model": "opus",
+  "model": "claude-opus-fable5",
   "thinkingBudget": "medium",
-  "effortLevel": "high",
+  "effortLevel": "max",
   "serviceTier": "default",
   "enableAutoTitleGeneration": true,
   "titleGenerationModel": "",
@@ -20,7 +20,7 @@
     "focusInputKey": "i"
   },
   "requireCommandOrControlEnterToSend": false,
-  "locale": "en",
+  "locale": "zh-CN",
   "providerConfigs": {
     "claude": {
       "safeMode": "acceptEdits",
@@ -29,15 +29,15 @@
       "loadUserSettings": true,
       "enableChrome": false,
       "enableBangBash": false,
-      "enableOpus1M": false,
-      "enableSonnet1M": false,
-      "customModels": "",
-      "lastModel": "opus",
+      "enableOpus1M": true,
+      "enableSonnet1M": true,
+      "customModels": "claude-opus-fable5\nclaude-opus-fable5\nclaude-opus-fable5",
+      "lastModel": "opus[1m]",
       "environmentVariables": "",
       "environmentHash": ""
     },
     "codex": {
-      "enabled": true,
+      "enabled": false,
       "safeMode": "workspace-write",
       "cliPath": "",
       "cliPathsByHost": {},
@@ -65,11 +65,11 @@
   },
   "settingsProvider": "claude",
   "savedProviderModel": {
-    "claude": "opus",
+    "claude": "claude-opus-fable5",
     "codex": "gpt-5.5"
   },
   "savedProviderEffort": {
-    "claude": "high",
+    "claude": "max",
     "codex": "medium"
   },
   "savedProviderServiceTier": {
@@ -83,7 +83,7 @@
     "claude": "yolo",
     "codex": "yolo"
   },
-  "lastCustomModel": "",
+  "lastCustomModel": "claude-opus-fable5",
   "maxTabs": 3,
   "tabBarPosition": "input",
   "enableAutoScroll": true,
