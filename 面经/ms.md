@@ -1,23 +1,4 @@
-Listed directory job
-Viewed %E4%B8%87%E5%AE%88%E6%B4%8B_Java%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%AE%9E%E4%B9%A0%E7%94%9F.md:1-53
-Listed directory project
-Searched for files: *
-Searched for "Spring AI"
-Searched for files: *
-Viewed ARCHITECTURE_REVIEW.md:1-286
-Searched for files: *Service*.java
-Searched for files: *.java
-Listed directory trade-service
-Listed directory java
-Searched for files: *
-Viewed OrderServiceImpl.java:1-120
-Searched for files: *
-Viewed ItemServiceImpl.java:1-48
-Viewed ItemMapper.java:1-22
-Searched for files: *PayOrder*.java
-Viewed PayOrderServiceImpl.java:1-145
-Searched for files: *
-Viewed AiBookCompanionController.java:1-77
+
 
 根据您提供的面试真题截图（去哪儿旅行 AI 面），结合您简历中的两个核心项目——**「novel 在线小说平台」** 与 **「万佳商城微服务电商系统」** 的技术栈及实战经验，为您整理了一份兼具**底层原理深度**与**真实项目落地细节**的高分回答：
 
