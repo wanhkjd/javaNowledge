@@ -1,0 +1,18 @@
+{
+  "id": "conv-1789310330357-fm4b08uax",
+  "providerId": "codex",
+  "title": "前言:",
+  "titleGenerationStatus": "pending",
+  "createdAt": 1789310330382,
+  "lastActivityAt": 1789310330382,
+  "sessionId": "01a09b34-e802-70c3-9d80-4ce98eafee3a",
+  "selectedModel": "gpt-6-astra",
+  "providerState": {
+    "threadId": "01a09b34-e802-70c3-9d80-4ce98eafee3a",
+    "nativeConversationContextEstablished": true,
+    "sessionFilePath": "C:\\Users\\35998\\.codex\\sessions\\2026\\09\\13\\rollout-2026-09-13T22-38-51-01a09b34-e802-70c3-9d80-4ce98eafee3a.jsonl",
+    "transcriptRootPath": "C:\\Users\\35998\\.codex\\sessions",
+    "workspaceDependencyToolVersion": 1
+  },
+  "linkedContentPath": "面经/面.md"
+}
