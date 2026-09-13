@@ -4,13 +4,20 @@
   "title": "整理排版文档内容",
   "titleGenerationStatus": "success",
   "createdAt": 1781512615104,
-  "updatedAt": 1781658635306,
-  "lastResponseAt": 1781512832211,
+  "lastActivityAt": 1781512832211,
   "sessionId": "019eca6d-3691-7e83-b607-407aa0421057",
   "providerState": {
     "threadId": "019eca6d-3691-7e83-b607-407aa0421057",
     "sessionFilePath": "C:\\Users\\35998\\.codex\\sessions\\2026\\06\\15\\rollout-2026-06-15T16-37-00-019eca6d-3691-7e83-b607-407aa0421057.jsonl",
     "transcriptRootPath": "C:\\Users\\35998\\.codex\\sessions"
+  },
+  "modelRecoverySource": {
+    "sessionId": "019eca6d-3691-7e83-b607-407aa0421057",
+    "providerState": {
+      "threadId": "019eca6d-3691-7e83-b607-407aa0421057",
+      "sessionFilePath": "C:\\Users\\35998\\.codex\\sessions\\2026\\06\\15\\rollout-2026-06-15T16-37-00-019eca6d-3691-7e83-b607-407aa0421057.jsonl",
+      "transcriptRootPath": "C:\\Users\\35998\\.codex\\sessions"
+    }
   },
   "usage": {
     "inputTokens": 40706,

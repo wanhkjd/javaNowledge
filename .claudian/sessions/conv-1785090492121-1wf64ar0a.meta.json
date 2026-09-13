@@ -4,13 +4,11 @@
   "title": "D:\\Obsidiant\\workplace\\JavaGuide面试   D:\\Obsidiant\\...",
   "titleGenerationStatus": "failed",
   "createdAt": 1785090492121,
-  "updatedAt": 1785090497254,
-  "lastResponseAt": 1785090497171,
+  "lastActivityAt": 1785090497171,
   "sessionId": "bb7955a0-b93f-4f6d-954b-e2b39575a786",
   "providerState": {
     "providerSessionId": "bb7955a0-b93f-4f6d-954b-e2b39575a786"
   },
-  "currentNote": "知识链接/知识连接.md",
   "usage": {
     "model": "claude-opus-fable5",
     "inputTokens": 0,
@@ -18,6 +16,7 @@
     "cacheReadInputTokens": 0,
     "contextWindow": 200000,
     "contextTokens": 0,
-    "percentage": 0
+    "percentage": 0,
+    "contextWindowIsAuthoritative": false
   }
 }

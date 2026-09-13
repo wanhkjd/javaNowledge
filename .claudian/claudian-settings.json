@@ -1,19 +1,20 @@
 {
   "userName": "",
   "permissionMode": "yolo",
-  "model": "claude-opus-fable5",
+  "model": "claude-code/claude-opus-fable5",
   "thinkingBudget": "medium",
   "effortLevel": "max",
   "serviceTier": "default",
   "enableAutoTitleGeneration": true,
+  "titleGenerationLocale": "",
   "titleGenerationModel": "",
   "excludedTags": [],
   "mediaFolder": "",
   "systemPrompt": "",
-  "persistentExternalContextPaths": [],
   "sharedEnvironmentVariables": "",
   "envSnippets": [],
   "customContextLimits": {},
+  "customModelAliases": {},
   "keyboardNavigation": {
     "scrollUpKey": "w",
     "scrollDownKey": "s",
@@ -23,30 +24,176 @@
   "locale": "zh-CN",
   "providerConfigs": {
     "claude": {
+      "enabled": true,
       "safeMode": "acceptEdits",
       "cliPath": "",
       "cliPathsByHost": {},
       "loadUserSettings": true,
       "enableChrome": false,
-      "enableBangBash": false,
-      "enableOpus1M": true,
-      "enableSonnet1M": true,
       "customModels": "claude-opus-fable5\nclaude-opus-fable5\nclaude-opus-fable5",
-      "lastModel": "opus[1m]",
+      "defaultModel": "opus",
+      "lastModel": "opus",
+      "modelEnvironmentType": "",
+      "titleModelEnvironmentType": "",
       "environmentVariables": "",
       "environmentHash": ""
     },
     "codex": {
-      "enabled": false,
+      "enabled": true,
       "safeMode": "workspace-write",
       "cliPath": "",
       "cliPathsByHost": {},
       "customModels": "",
+      "discoveredModels": [
+        {
+          "model": "claude-fable-5-1",
+          "displayName": "claude-fable-5-1",
+          "description": "claude-fable-5-1",
+          "supportedReasoningEfforts": [
+            {
+              "value": "none",
+              "description": "Disable Thinking"
+            },
+            {
+              "value": "high",
+              "description": "Enabled Thinking"
+            }
+          ],
+          "defaultReasoningEffort": "high",
+          "serviceTiers": [],
+          "defaultServiceTier": null,
+          "inputModalities": [
+            "text",
+            "image"
+          ],
+          "isDefault": true
+        },
+        {
+          "model": "gpt-5-codex",
+          "displayName": "gpt-5-codex",
+          "description": "gpt-5-codex",
+          "supportedReasoningEfforts": [
+            {
+              "value": "none",
+              "description": "Disable Thinking"
+            },
+            {
+              "value": "high",
+              "description": "Enabled Thinking"
+            }
+          ],
+          "defaultReasoningEffort": "high",
+          "serviceTiers": [],
+          "defaultServiceTier": null,
+          "inputModalities": [
+            "text",
+            "image"
+          ],
+          "isDefault": false
+        },
+        {
+          "model": "gpt-6-astra",
+          "displayName": "gpt-6-astra",
+          "description": "gpt-6-astra",
+          "supportedReasoningEfforts": [
+            {
+              "value": "none",
+              "description": "Disable Thinking"
+            },
+            {
+              "value": "high",
+              "description": "Enabled Thinking"
+            }
+          ],
+          "defaultReasoningEffort": "high",
+          "serviceTiers": [],
+          "defaultServiceTier": null,
+          "inputModalities": [
+            "text",
+            "image"
+          ],
+          "isDefault": false
+        },
+        {
+          "model": "claude-opus-4-7",
+          "displayName": "claude-opus-4-7",
+          "description": "claude-opus-4-7",
+          "supportedReasoningEfforts": [
+            {
+              "value": "none",
+              "description": "Disable Thinking"
+            },
+            {
+              "value": "high",
+              "description": "Enabled Thinking"
+            }
+          ],
+          "defaultReasoningEffort": "high",
+          "serviceTiers": [],
+          "defaultServiceTier": null,
+          "inputModalities": [
+            "text",
+            "image"
+          ],
+          "isDefault": false
+        },
+        {
+          "model": "claude-opus-4-6",
+          "displayName": "claude-opus-4-6",
+          "description": "claude-opus-4-6",
+          "supportedReasoningEfforts": [
+            {
+              "value": "none",
+              "description": "Disable Thinking"
+            },
+            {
+              "value": "high",
+              "description": "Enabled Thinking"
+            }
+          ],
+          "defaultReasoningEffort": "high",
+          "serviceTiers": [],
+          "defaultServiceTier": null,
+          "inputModalities": [
+            "text",
+            "image"
+          ],
+          "isDefault": false
+        },
+        {
+          "model": "claude-opus-4-5-20251101",
+          "displayName": "claude-opus-4-5-20251101",
+          "description": "claude-opus-4-5-20251101",
+          "supportedReasoningEfforts": [
+            {
+              "value": "none",
+              "description": "Disable Thinking"
+            },
+            {
+              "value": "high",
+              "description": "Enabled Thinking"
+            }
+          ],
+          "defaultReasoningEffort": "high",
+          "serviceTiers": [],
+          "defaultServiceTier": null,
+          "inputModalities": [
+            "text",
+            "image"
+          ],
+          "isDefault": false
+        }
+      ],
+      "modelAliases": {},
+      "visibleModels": null,
+      "enableUltraEffort": false,
       "reasoningSummary": "detailed",
       "environmentVariables": "",
-      "environmentHash": "",
+      "environmentHash": "runtime-input:v1:ed54f4f5238abeec7f65a5da1e468c9a639e157a7d1c7753b53f54ba1196e8a0",
+      "catalogTimestamp": 1789289534387,
+      "catalogFingerprint": "2:f0df4e90ccd8092dd7e4f95e38f0bfcf4541133c67f5666c6907102e46ba22ab",
       "installationMethodsByHost": {
-        "device:64838c5d-f4b4-41d7-b819-f1ec4c0803a8": "native-windows"
+        "device-3cf235a28696dcdb0fa33617a8e9f6b34823befd311089d548ee77a7d0d06259": "native-windows"
       },
       "wslDistroOverridesByHost": {}
     },
@@ -61,12 +208,39 @@
       "selectedMode": "",
       "thinkingOptionsByModel": {},
       "visibleModels": []
+    },
+    "grok": {
+      "catalogsByHost": {},
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "",
+      "modelAliases": {},
+      "preferredReasoningByModel": {},
+      "visibleModels": null
+    },
+    "pi": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "discoveredModels": [],
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "",
+      "modelAliases": {},
+      "preferredThinkingByModel": {},
+      "toolMode": "all",
+      "visibleModels": []
     }
   },
   "settingsProvider": "claude",
+  "lastSelectedChatModel": {
+    "providerId": "codex",
+    "model": "gpt-6-astra"
+  },
   "savedProviderModel": {
-    "claude": "claude-opus-fable5",
-    "codex": "gpt-5.5"
+    "claude": "claude-code/claude-opus-fable5",
+    "codex": "claude-code/claude-opus-fable5"
   },
   "savedProviderEffort": {
     "claude": "max",
@@ -75,19 +249,29 @@
   "savedProviderServiceTier": {
     "codex": "default"
   },
-  "savedProviderThinkingBudget": {
-    "claude": "medium",
-    "codex": "medium"
-  },
+  "savedProviderThinkingBudget": {},
   "savedProviderPermissionMode": {
     "claude": "yolo",
     "codex": "yolo"
   },
+  "pendingProviderSessionInvalidations": {},
   "lastCustomModel": "claude-opus-fable5",
-  "maxTabs": 3,
-  "tabBarPosition": "input",
+  "maxWarmAgentProcesses": 5,
   "enableAutoScroll": true,
+  "showMessageTimestamps": false,
   "deferMathRenderingDuringStreaming": true,
+  "expandFileEditsByDefault": false,
   "chatViewPlacement": "right-sidebar",
-  "hiddenProviderCommands": {}
+  "enableDualPane": true,
+  "dualPaneSide": "right",
+  "restoreTabsOnStartup": true,
+  "collabEnabled": false,
+  "collabProjectsFolder": "workspace",
+  "collabGitPath": "",
+  "sessionManagerOrganization": "list",
+  "sessionManagerSort": "last-updated",
+  "pinnedLinkedContentPaths": [],
+  "hiddenProviderCommands": {},
+  "maxTabs": 3,
+  "tabBarPosition": "input"
 }
