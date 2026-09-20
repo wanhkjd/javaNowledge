@@ -4,7 +4,7 @@
   "title": "帮我整理这些面试问题 和答案 排版",
   "titleGenerationStatus": "failed",
   "createdAt": 1789892175049,
-  "lastActivityAt": 1789892175049,
+  "lastActivityAt": 1789892818050,
   "sessionId": "01a0bde3-26dc-7bc0-bb6c-a44800305e19",
   "selectedModel": "gpt-5.6-sol",
   "providerState": {
@@ -14,5 +14,15 @@
     "transcriptRootPath": "C:\\Users\\35998\\.codex\\sessions",
     "workspaceDependencyToolVersion": 1
   },
-  "linkedContentPath": "模拟.md"
+  "linkedContentPath": "模拟.md",
+  "usage": {
+    "inputTokens": 64176,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 57784,
+    "contextWindow": 121600,
+    "contextWindowIsAuthoritative": true,
+    "contextTokens": 64176,
+    "percentage": 53,
+    "model": "gpt-5.6-sol"
+  }
 }
