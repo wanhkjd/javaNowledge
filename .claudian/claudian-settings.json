@@ -46,9 +46,9 @@
       "customModels": "",
       "discoveredModels": [
         {
-          "model": "claude-fable-5-1",
-          "displayName": "claude-fable-5-1",
-          "description": "claude-fable-5-1",
+          "model": "gpt-5.6-sol",
+          "displayName": "gpt-5.6-sol",
+          "description": "gpt-5.6-sol",
           "supportedReasoningEfforts": [
             {
               "value": "none",
@@ -69,9 +69,9 @@
           "isDefault": true
         },
         {
-          "model": "gpt-5-codex",
-          "displayName": "gpt-5-codex",
-          "description": "gpt-5-codex",
+          "model": "gpt-5.6",
+          "displayName": "gpt-5.6",
+          "description": "gpt-5.6",
           "supportedReasoningEfforts": [
             {
               "value": "none",
@@ -92,78 +92,9 @@
           "isDefault": false
         },
         {
-          "model": "gpt-6-astra",
-          "displayName": "gpt-6-astra",
-          "description": "gpt-6-astra",
-          "supportedReasoningEfforts": [
-            {
-              "value": "none",
-              "description": "Disable Thinking"
-            },
-            {
-              "value": "high",
-              "description": "Enabled Thinking"
-            }
-          ],
-          "defaultReasoningEffort": "high",
-          "serviceTiers": [],
-          "defaultServiceTier": null,
-          "inputModalities": [
-            "text",
-            "image"
-          ],
-          "isDefault": false
-        },
-        {
-          "model": "claude-opus-4-7",
-          "displayName": "claude-opus-4-7",
-          "description": "claude-opus-4-7",
-          "supportedReasoningEfforts": [
-            {
-              "value": "none",
-              "description": "Disable Thinking"
-            },
-            {
-              "value": "high",
-              "description": "Enabled Thinking"
-            }
-          ],
-          "defaultReasoningEffort": "high",
-          "serviceTiers": [],
-          "defaultServiceTier": null,
-          "inputModalities": [
-            "text",
-            "image"
-          ],
-          "isDefault": false
-        },
-        {
-          "model": "claude-opus-4-6",
-          "displayName": "claude-opus-4-6",
-          "description": "claude-opus-4-6",
-          "supportedReasoningEfforts": [
-            {
-              "value": "none",
-              "description": "Disable Thinking"
-            },
-            {
-              "value": "high",
-              "description": "Enabled Thinking"
-            }
-          ],
-          "defaultReasoningEffort": "high",
-          "serviceTiers": [],
-          "defaultServiceTier": null,
-          "inputModalities": [
-            "text",
-            "image"
-          ],
-          "isDefault": false
-        },
-        {
-          "model": "claude-opus-4-5-20251101",
-          "displayName": "claude-opus-4-5-20251101",
-          "description": "claude-opus-4-5-20251101",
+          "model": "gpt-image-2.5",
+          "displayName": "gpt-image-2.5",
+          "description": "gpt-image-2.5",
           "supportedReasoningEfforts": [
             {
               "value": "none",
@@ -190,7 +121,7 @@
       "reasoningSummary": "detailed",
       "environmentVariables": "",
       "environmentHash": "runtime-input:v1:ed54f4f5238abeec7f65a5da1e468c9a639e157a7d1c7753b53f54ba1196e8a0",
-      "catalogTimestamp": 1789305221108,
+      "catalogTimestamp": 1789892139917,
       "catalogFingerprint": "2:f0df4e90ccd8092dd7e4f95e38f0bfcf4541133c67f5666c6907102e46ba22ab",
       "installationMethodsByHost": {
         "device-3cf235a28696dcdb0fa33617a8e9f6b34823befd311089d548ee77a7d0d06259": "native-windows"

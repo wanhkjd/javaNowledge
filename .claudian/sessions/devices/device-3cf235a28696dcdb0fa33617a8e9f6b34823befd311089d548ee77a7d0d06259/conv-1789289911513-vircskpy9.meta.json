@@ -6,7 +6,7 @@
   "createdAt": 1789289911517,
   "lastActivityAt": 1789290147775,
   "sessionId": "01a099fd-56ae-7cc0-9692-34af788c6698",
-  "selectedModel": "gpt-6-astra",
+  "selectedModel": "gpt-5.6-sol",
   "providerState": {
     "threadId": "01a099fd-56ae-7cc0-9692-34af788c6698",
     "nativeConversationContextEstablished": true,
