@@ -820,4 +820,188 @@ PhantomReference<Object> pr = new PhantomReference<>(obj, queue);
 >
 > 参数 **&**：让命令在后台执行，终端退出后命令仍旧执行。
 
+### 2. 用的 JVM 调优的参数都有哪些？
+
+对于 JVM 调优，主要就是调整年轻代、老年代、元空间的内存空间大小及使用的垃圾回收器类型。
+
+参考：[https://www.oracle.com/java/technologies/javase/vmoptions-jsp.html](https://www.oracle.com/java/technologies/javase/vmoptions-jsp.html)
+
+1）设置堆的初始大小和最大大小，为了防止垃圾收集器在初始大小、最大大小之间收缩堆而产生额外的时间，通常把最大、初始大小设置为相同的值。
+
+> -Xms：设置堆的初始化大小
+>
+> -Xmx：设置堆的最大大小
+
+2）设置年轻代中 Eden 区和两个 Survivor 区的大小比例。该值如果不设置，则默认比例为 8:1:1。Java 官方通过增大 Eden 区的大小，来减少 YGC 发生的次数，但有时我们发现，虽然次数减少了，但 Eden 区满的时候，由于占用的空间较大，导致释放缓慢，此时 STW 的时间较长，因此需要按照程序情况去调优。
+
+> -XX:SurvivorRatio=3，表示年轻代中的分配比率：survivor:eden = 2:3
+
+3）年轻代和老年代默认比例为 1：2。可以通过调整二者空间大小比率来设置两者的大小。
+
+> -XX:newSize 设置年轻代的初始大小
+>
+> -XX:MaxNewSize 设置年轻代的最大大小，初始大小和最大大小两个值通常相同
+
+4）线程堆栈的设置：**每个线程默认会开启 1M 的堆栈**，用于存放栈帧、调用参数、局部变量等，但一般 256K 就够用。通常减少每个线程的堆栈，可以产生更多的线程，但这实际上还受限于操作系统。
+
+> -Xss 对每个线程 stack 大小的调整，-Xss128k
+
+5）一般来说，当 survivor 区不够大或者占用量达到 50%，就会把一些对象放到老年区。通过设置合理的 eden 区、survivor 区及使用率，可以将年轻对象保存在年轻代，从而避免 full GC，使用 -Xmn 设置年轻代的大小。
+
+6）系统 CPU 持续飙高的话，首先先排查代码问题，如果代码没问题，则咨询运维或者云服务器供应商，通常服务器重启或者服务器迁移即可解决。
+
+7）对于占用内存比较多的大对象，一般会选择在老年代分配内存。如果在年轻代给大对象分配内存，年轻代内存不够了，就要在 eden 区移动大量对象到老年代，然后这些移动的对象可能很快消亡，因此导致 full GC。通过设置参数：-XX:PetenureSizeThreshold=1000000，单位为 B，标明对象大小超过 1M 时，在老年代（tenured）分配内存空间。
+
+8）一般情况下，年轻对象放在 eden 区，当第一次 GC 后，如果对象还存活，放到 survivor 区，此后，每 GC 一次，年龄增加 1，当对象的年龄达到阈值，就被放到 tenured 老年区。这个阈值可以通过 -XX:MaxTenuringThreshold 设置。如果想让对象留在年轻代，可以设置比较大的阈值。
+
+> （1）-XX:+UseParallelGC：年轻代使用并行垃圾回收收集器。这是一个关注吞吐量的收集器，可以尽可能地减少垃圾回收时间。
+>
+> （2）-XX:+UseParallelOldGC：设置老年代使用并行垃圾回收收集器。
+
+9）尝试使用大的内存分页：使用大的内存分页增加 CPU 的内存寻址能力，从而提升系统的性能。
+
+> -XX:+LargePageSizeInBytes 设置内存页的大小
+
+10）使用非占用的垃圾收集器。
+
+> -XX:+UseConcMarkSweepGC 老年代使用 CMS 收集器降低停顿。
+
+### 3. 说一下 JVM 调优的工具？
+
+#### 命令工具
+
+**jps（Java Process Status）**
+
+输出 JVM 中运行的进程状态信息（现在一般使用 jconsole）。
+
+**jstack**
+
+查看 java 进程内**线程的堆栈**信息。
+
+`jstack [option] <pid>`
+
+java 案例：
+
+```Java
+package com.heima.jvm;
+
+public class Application {
+
+    public static void main(String[] args) throws InterruptedException {
+        while (true){
+            Thread.sleep(1000);
+            System.out.println("哈哈哈");
+        }
+    }
+}
+```
+
+**jmap**
+
+用于生成堆转存快照。
+
+> jmap [options] pid 内存映像信息
+>
+> jmap -heap pid 显示 Java 堆的信息
+>
+> jmap -dump:format=b,file=heap.hprof pid
+>
+> format=b 表示以 hprof 二进制格式转储 Java 堆的内存
+>
+> file=<filename> 用于指定快照 dump 文件的文件名。
+
+例：显示某一个 java 运行的堆信息
+
+```Java
+C:\Users\yuhon>jmap -heap 53280
+Attaching to process ID 53280, please wait...
+Debugger attached successfully.
+Server compiler detected.
+JVM version is 25.321-b07
+
+using thread-local object allocation.
+Parallel GC with 8 thread(s)   //并行的垃圾回收器
+
+Heap Configuration:  //堆配置
+   MinHeapFreeRatio         = 0   //空闲堆空间的最小百分比
+   MaxHeapFreeRatio         = 100  //空闲堆空间的最大百分比
+   MaxHeapSize              = 8524922880 (8130.0MB) //堆空间允许的最大值
+   NewSize                  = 178257920 (170.0MB) //新生代堆空间的默认值
+   MaxNewSize               = 2841640960 (2710.0MB) //新生代堆空间允许的最大值
+   OldSize                  = 356515840 (340.0MB) //老年代堆空间的默认值
+   NewRatio                 = 2 //新生代与老年代的堆空间比值，表示新生代：老年代=1：2
+   SurvivorRatio            = 8 //两个Survivor区和Eden区的堆空间比值为8,表示S0:S1:Eden=1:1:8
+   MetaspaceSize            = 21807104 (20.796875MB) //元空间的默认值
+   CompressedClassSpaceSize = 1073741824 (1024.0MB) //压缩类使用空间大小
+   MaxMetaspaceSize         = 17592186044415 MB //元空间允许的最大值
+   G1HeapRegionSize         = 0 (0.0MB)//在使用 G1 垃圾回收算法时，JVM 会将 Heap 空间分隔为若干个 Region，该参数用来指定每个 Region 空间的大小。
+
+Heap Usage:
+PS Young Generation
+Eden Space: //Eden使用情况
+   capacity = 134217728 (128.0MB)
+   used     = 10737496 (10.240074157714844MB)
+   free     = 123480232 (117.75992584228516MB)
+   8.000057935714722% used
+From Space: //Survivor-From 使用情况
+   capacity = 22020096 (21.0MB)
+   used     = 0 (0.0MB)
+   free     = 22020096 (21.0MB)
+   0.0% used
+To Space: //Survivor-To 使用情况
+   capacity = 22020096 (21.0MB)
+   used     = 0 (0.0MB)
+   free     = 22020096 (21.0MB)
+   0.0% used
+PS Old Generation  //老年代 使用情况
+   capacity = 356515840 (340.0MB)
+   used     = 0 (0.0MB)
+   free     = 356515840 (340.0MB)
+   0.0% used
+
+3185 interned Strings occupying 261264 bytes.
+```
+
+**jhat**
+
+用于分析 jmap 生成的堆转存快照（一般不推荐使用，而是使用 Eclipse Memory Analyzer）。
+
+**jstat**
+
+是 JVM 统计监测工具。可以用来显示垃圾回收信息、类加载信息、新生代统计信息等。
+
+常见参数：
+
+① 总结垃圾回收统计：`jstat -gcutil pid`
+
+② 垃圾回收统计：`jstat -gc pid`
+
+|字段|含义|
+|---|---|
+|S0|幸存 1 区当前使用比例|
+|S1|幸存 2 区当前使用比例|
+|E|伊甸园区使用比例|
+|O|老年代使用比例|
+|M|元数据区使用比例|
+|CCS|压缩使用比例|
+|YGC|年轻代垃圾回收次数|
+|YGCT|年轻代垃圾回收消耗时间|
+|FGC|老年代垃圾回收次数|
+|FGCT|老年代垃圾回收消耗时间|
+|GCT|垃圾回收消耗总时间|
+
+#### 可视化工具
+
+**jconsole**
+
+用于对 jvm 的内存、线程、类的监控，是一个基于 jmx 的 GUI 性能监控工具。
+
+打开方式：java 安装目录 bin 目录下直接启动 jconsole.exe 就行。
+
+**VisualVM：故障处理工具**
+
+能够监控线程、内存情况，查看方法的 CPU 时间和内存中的对象，已被 GC 的对象，反向查看分配的堆栈。
+
+打开方式：java 安装目录 bin 目录下直接启动 jvisualvm.exe 就行。
+
 <!-- PLACEHOLDER_APPEND -->
