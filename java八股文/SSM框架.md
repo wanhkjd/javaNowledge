@@ -177,6 +177,7 @@ Spring 可以通过**三级缓存**解决大部分单例 Bean 的属性注入循
 - `@Component`、`@Controller`、`@Service`、`@Repository`：声明 Bean；
 - `@Autowired`：按类型自动注入；
 - `@Qualifier`：配合 `@Autowired` 按名称注入；
+- `@Resource`：JDK 提供的注解，默认按名称注入；
 - `@Scope`：指定 Bean 作用域；
 - `@Configuration`：声明配置类；
 - `@ComponentScan`：指定组件扫描路径；
