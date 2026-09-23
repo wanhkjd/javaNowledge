@@ -4,6 +4,10 @@
 
 ## 一、Spring
 
+> 下图为 Spring 核心全景：左侧是 IoC 容器与依赖注入，中间是 Bean 生命周期核心主线（九个阶段），右侧是 AOP 代理机制与通知类型，并标注了 AOP 代理在生命周期后置处理阶段织入。可对照本节 Bean 生命周期、AOP、事务等小节理解。
+
+![[java八股文/资源/图-Spring核心.png]]
+
 ### 1. Spring 框架中的单例 Bean 是线程安全的吗？
 
 **回答：**
@@ -266,7 +270,7 @@ Spring Boot 自动配置主要基于 `@SpringBootApplication` 注解。
 
 **回答：**
 
-![[java八股文/资源/MyBatis的执行流程.png]]
+![[java八股文/资源/图-MyBatis执行流程.png]]
 
 MyBatis 的执行流程如下：
 
