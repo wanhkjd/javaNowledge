@@ -30,14 +30,14 @@
 
 #### 2. 常用核心参数
 
-| 参数名 | 类型 | 说明 | 项目中实战示例 |
-| :--- | :--- | :--- | :--- |
-| `value` / `cacheNames` | `String[]` | 缓存的命名空间（Cache Name） | `value = CacheConsts.AUTHOR_INFO_CACHE_NAME` |
-| `cacheManager` | `String` | 指定由哪个 `CacheManager` 处理 | `cacheManager = CacheConsts.REDIS_CACHE_MANAGER` |
-| `key` | `String` (SpEL) | 缓存键，支持 SpEL。缺省时使用参数作为 key | 默认或传入如 `#userId`、`#id` |
-| `unless` | `String` (SpEL) | **方法执行后**判定，条件为 true 则**不写入缓存** | `unless = "#result == null"`（防止缓存 null 结果） |
-| `condition` | `String` (SpEL) | **方法执行前**判定，条件为 true 时才启用缓存 | 如 `condition = "#id > 0"` |
-| `sync` | `boolean` | 是否异步/加锁同步加载（防止缓存击穿并发查库） | 默认为 false |
+| 参数名                    | 类型              | 说明                              | 项目中实战示例                                          |
+| :--------------------- | :-------------- | :------------------------------ | :----------------------------------------------- |
+| `value` / `cacheNames` | `String[]`      | 缓存的命名空间（Cache Name）             | `value = CacheConsts.AUTHOR_INFO_CACHE_NAME`     |
+| `cacheManager`         | `String`        | 指定由哪个 `CacheManager` 处理         | `cacheManager = CacheConsts.REDIS_CACHE_MANAGER` |
+| `key`                  | `String` (SpEL) | 缓存键，支持 SpEL。缺省时使用参数作为 key       | 默认或传入如 `#userId`、`#id`                           |
+| `unless`               | `String` (SpEL) | **方法执行后**判定，条件为 true 则**不写入缓存** | `unless = "#result == null"`（防止缓存 null 结果）       |
+| `condition`            | `String` (SpEL) | **方法执行前**判定，条件为 true 时才启用缓存     | 如 `condition = "#id > 0"`                        |
+| `sync`                 | `boolean`       | 是否异步/加锁同步加载（防止缓存击穿并发查库）         | 默认为 false                                        |
 
 #### 3. 项目中的典型使用
 参考 [`AuthorInfoCacheManager.java`](file:///C:/Users/35998/Desktop/job/project/novel/src/main/java/novel/manager/cache/AuthorInfoCacheManager.java#L30-L32)：
